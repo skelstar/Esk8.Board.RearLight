@@ -3,7 +3,12 @@
 
 void LedLightsLib::initialise(uint8_t pin, uint8_t numPixels, uint8_t brightness)
 {
+#ifdef HEADLIGHT
+  _strip = new Adafruit_NeoPixel(numPixels, pin, NEO_GRBW + NEO_KHZ800);
+#endif
+#ifdef REAR_LIGHT
   _strip = new Adafruit_NeoPixel(numPixels, pin, NEO_GRB + NEO_KHZ800);
+#endif
   _strip->begin();
   _brightness = brightness;
   _strip->setBrightness(_brightness);
@@ -22,6 +27,18 @@ void LedLightsLib::setAll(uint32_t colour)
   setAll(colour, 0, _strip->numPixels() - 1);
 }
 
+void LedLightsLib::setFrontLights()
+{
+  _strip->setBrightness(HEADLIGHT_BRIGHTNESS);
+
+  uint32_t on = _strip->Color(0, 0, 0, 255);
+  uint32_t off = _strip->Color(0, 0, 0, 0);
+
+  setAll(on, 0, 12 - 1);
+  setAll(off, 12, 12 + 10 - 1);
+  setAll(on, 12 + 10, 12 + 10 + 12 - 1);
+}
+
 void LedLightsLib::setAll(uint32_t colour, uint8_t start, uint8_t end)
 {
   if (_strip == NULL)
@@ -33,6 +50,8 @@ void LedLightsLib::setAll(uint32_t colour, uint8_t start, uint8_t end)
   if (start > end || end > _strip->numPixels() - 1)
   {
     Serial.printf("ERROR: start and/or end pixels are out of range!\n");
+    Serial.printf("%d %d %d\n", _strip->numPixels(), start, end);
+
     return;
   }
 
