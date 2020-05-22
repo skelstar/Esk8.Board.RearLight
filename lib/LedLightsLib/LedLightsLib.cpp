@@ -31,12 +31,7 @@ void LedLightsLib::setFrontLights()
 {
   _strip->setBrightness(HEADLIGHT_BRIGHTNESS);
 
-  uint32_t on = _strip->Color(0, 0, 0, 255);
-  uint32_t off = _strip->Color(0, 0, 0, 0);
-
-  setAll(on, 0, 12 - 1);
-  setAll(off, 12, 12 + 10 - 1);
-  setAll(on, 12 + 10, 12 + 10 + 12 - 1);
+  setAll(COLOUR_HEADLIGHT_WHITE, 0, _strip->numPixels() - 1);
 }
 
 void LedLightsLib::setAll(uint32_t colour, uint8_t start, uint8_t end)
@@ -50,7 +45,7 @@ void LedLightsLib::setAll(uint32_t colour, uint8_t start, uint8_t end)
   if (start > end || end > _strip->numPixels() - 1)
   {
     Serial.printf("ERROR: start and/or end pixels are out of range!\n");
-    Serial.printf("%d %d %d\n", _strip->numPixels(), start, end);
+    Serial.printf("num: %d start: %d end: %d\n", _strip->numPixels(), start, end);
 
     return;
   }

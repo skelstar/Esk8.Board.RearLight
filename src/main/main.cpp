@@ -16,7 +16,7 @@ HardwareSerial vesc_serial(2); // &vesc_serial = Serial1;
 #define NUM_PIXELS 31
 #endif
 #ifdef HEADLIGHT
-#define NUM_PIXELS 12 + 10 + 12 // 12 per ring, 10 in the centre
+#define NUM_PIXELS 8 + 8 // 8 leds each side
 #endif
 
 #include <LedLightsLib.h>

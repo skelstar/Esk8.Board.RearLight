@@ -12,6 +12,7 @@ public:
     uint32_t COLOUR_GREEN = _strip->Color(0, 255, 0);
     uint32_t COLOUR_BLUE = _strip->Color(0, 0, 255);
     uint32_t COLOUR_WHITE = _strip->Color(255, 255, 255);
+    uint32_t COLOUR_HEADLIGHT_WHITE = _strip->Color(0, 0, 50, 255);
 
     void initialise(uint8_t pin, uint8_t numPixels, uint8_t brightness);
     void setBrightness(uint8_t brightness);
