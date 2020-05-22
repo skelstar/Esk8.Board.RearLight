@@ -7,12 +7,10 @@
 
 #include <Fsm.h>
 
-HardwareSerial vesc_serial(2); // &vesc_serial = Serial1;
-
 //------------------------------------------------------------------
 
 #define LIGHTS_PIN 27
-#ifdef REAR_LIGHT
+#ifdef REARLIGHT
 #define NUM_PIXELS 31
 #endif
 #ifdef HEADLIGHT
@@ -22,39 +20,33 @@ HardwareSerial vesc_serial(2); // &vesc_serial = Serial1;
 #include <LedLightsLib.h>
 LedLightsLib light;
 
+#include <state.h>
+
 //------------------------------------------------------------------
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.printf("Esk8.Board.RearLight: Ready!");
+  Serial.printf("\n-----------\nEsk8.Board.RearLight: Ready!\n");
 
-  delay(3000);
-
-  light.initialise(LIGHTS_PIN, NUM_PIXELS, LIGHT_BRIGHTNESS);
-  delay(100);
-
-#ifdef HEADLIGHT
-  light.setFrontLights();
-#endif
-#ifdef REAR_LIGHT
-  light.setAll(light.COLOUR_RED);
-#endif
+  addFsmTransitions();
 }
 
 elapsedMillis since_refreshed_leds;
 
 void loop()
 {
-  if (since_refreshed_leds > 5000)
-  {
-    since_refreshed_leds = 0;
-#ifdef HEADLIGHT
-    light.setFrontLights();
-#endif
-#ifdef REAR_LIGHT
-    light.setAll(light.COLOUR_RED);
-#endif
-  }
+
+  fsm.run_machine();
+  //   if (since_refreshed_leds > 5000)
+  //   {
+  //     since_refreshed_leds = 0;
+  // #ifdef HEADLIGHT
+  //     light.setFrontLights();
+  // #endif
+  // #ifdef REARLIGHT
+  //     light.setAll(light.COLOUR_RED);
+  // #endif
+  //   }
   vTaskDelay(10);
 }

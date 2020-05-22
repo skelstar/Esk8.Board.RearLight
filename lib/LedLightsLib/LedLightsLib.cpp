@@ -1,40 +1,47 @@
 #include "Arduino.h"
 #include "LedLightsLib.h"
 
+//------------------------------------------------------------------
+
 void LedLightsLib::initialise(uint8_t pin, uint8_t numPixels, uint8_t brightness)
 {
 #ifdef HEADLIGHT
   _strip = new Adafruit_NeoPixel(numPixels, pin, NEO_GRBW + NEO_KHZ800);
 #endif
-#ifdef REAR_LIGHT
+#ifdef REARLIGHT
   _strip = new Adafruit_NeoPixel(numPixels, pin, NEO_GRB + NEO_KHZ800);
 #endif
   _strip->begin();
   _brightness = brightness;
+
   _strip->setBrightness(_brightness);
   _strip->clear();
   _strip->show();
 }
+//------------------------------------------------------------------
 
 void LedLightsLib::setBrightness(uint8_t brightness)
 {
   _brightness = brightness;
   _strip->setBrightness(_brightness);
 }
-
-void LedLightsLib::setAll(uint32_t colour)
-{
-  setAll(colour, 0, _strip->numPixels() - 1);
-}
+//------------------------------------------------------------------
 
 void LedLightsLib::setFrontLights()
 {
-  _strip->setBrightness(HEADLIGHT_BRIGHTNESS);
+  _strip->setBrightness(LIGHT_BRIGHTNESS);
 
   setAll(COLOUR_HEADLIGHT_WHITE, 0, _strip->numPixels() - 1);
 }
+//------------------------------------------------------------------
 
-void LedLightsLib::setAll(uint32_t colour, uint8_t start, uint8_t end)
+void LedLightsLib::setAll(uint32_t colour, bool show)
+{
+  setAll(colour, 0, _strip->numPixels() - 1, show);
+}
+//------------------------------------------------------------------
+
+void LedLightsLib::setAll(uint32_t colour, uint8_t start, uint8_t end, bool show)
 {
   if (_strip == NULL)
   {
@@ -54,8 +61,18 @@ void LedLightsLib::setAll(uint32_t colour, uint8_t start, uint8_t end)
   {
     setPixel(i, colour, false);
   }
-  _strip->show();
+  if (show)
+  {
+    _strip->show();
+  }
 }
+//------------------------------------------------------------------
+int LedLightsLib::numPixels()
+{
+  return _strip->numPixels();
+}
+
+//------------------------------------------------------------------
 
 void LedLightsLib::setStatusIndicators(uint32_t vesc, uint32_t board, uint32_t controller)
 {
@@ -78,8 +95,9 @@ void LedLightsLib::setStatusIndicators(uint32_t vesc, uint32_t board, uint32_t c
 
   _strip->show();
 }
+//------------------------------------------------------------------
 
-void LedLightsLib::setPixel(uint8_t pixel, uint32_t colour, bool show)
+void LedLightsLib::setPixel(uint8_t pixel, uint32_t colour, bool show = true)
 {
   _strip->setPixelColor(pixel, colour);
   if (show)
@@ -87,6 +105,7 @@ void LedLightsLib::setPixel(uint8_t pixel, uint32_t colour, bool show)
     _strip->show();
   }
 }
+//------------------------------------------------------------------
 
 uint32_t LedLightsLib::getColour(uint8_t r, uint8_t g, uint8_t b, uint8_t w)
 {
@@ -119,3 +138,4 @@ void LedLightsLib::showBatteryGraph(float percentage)
   _strip->setBrightness(oldBrightness);
   return;
 }
+//------------------------------------------------------------------
