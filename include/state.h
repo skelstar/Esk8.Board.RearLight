@@ -54,7 +54,7 @@ State state_all_on([] {
 #ifdef HEADLIGHT
   light.setFrontLights();
 #endif
-#ifdef REARLIGHT
+#ifdef TAILLIGHT
   light.setAll(light.COLOUR_RED);
 #endif
 },
@@ -66,7 +66,7 @@ void setHeadlightWipe()
   wipeTo = light.COLOUR_HEADLIGHT_WHITE;
 }
 
-void setRearlightWipe()
+void setTailLightWipe()
 {
   wipeTo = light.COLOUR_RED;
 }
@@ -80,8 +80,8 @@ void addFsmTransitions()
   fsm.add_transition(&state_init, &state_wipe_up, EV_INIT_FINISHED, setHeadlightWipe);
   fsm.add_transition(&state_wipe_up, &state_all_on, EV_WIPE_FINISHED, NULL);
 #endif
-#ifdef REARLIGHT
-  fsm.add_transition(&state_init, &state_wipe_up, EV_INIT_FINISHED, setRearlightWipe);
+#ifdef TAILLIGHT
+  fsm.add_transition(&state_init, &state_wipe_up, EV_INIT_FINISHED, setTailLightWipe);
   fsm.add_transition(&state_wipe_up, &state_all_on, EV_WIPE_FINISHED, NULL);
 #endif
 }

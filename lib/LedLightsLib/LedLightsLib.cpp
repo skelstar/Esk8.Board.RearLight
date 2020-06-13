@@ -8,7 +8,7 @@ void LedLightsLib::initialise(uint8_t pin, uint8_t numPixels, uint8_t brightness
 #ifdef HEADLIGHT
   _strip = new Adafruit_NeoPixel(numPixels, pin, NEO_GRBW + NEO_KHZ800);
 #endif
-#ifdef REARLIGHT
+#ifdef TAILLIGHT
   _strip = new Adafruit_NeoPixel(numPixels, pin, NEO_GRB + NEO_KHZ800);
 #endif
   _strip->begin();

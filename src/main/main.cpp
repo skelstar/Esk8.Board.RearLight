@@ -23,12 +23,12 @@ void setup()
 {
   Serial.begin(115200);
   Serial.printf("\n-----------\n");
-  Serial.printf("Esk8.Board.RearLight:\n");
+  Serial.printf("Esk8.Board.TailLight:\n");
 #ifdef HEADLIGHT
   Serial.printf("- mode: HEADLIGHT\n");
 #endif
-#ifdef REARLIGHT
-  Serial.printf("- mode: REARLIGHT\n");
+#ifdef TAILLIGHT
+  Serial.printf("- mode: TAILLIGHT\n");
 #endif
   Serial.printf("- brightness: %d\n", LIGHT_BRIGHTNESS);
   Serial.println();
