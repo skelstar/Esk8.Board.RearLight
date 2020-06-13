@@ -17,13 +17,10 @@ public:
     void initialise(uint8_t pin, uint8_t numPixels, uint8_t brightness);
     void setBrightness(uint8_t brightness);
     int numPixels();
-    void setStatusIndicators(uint32_t vesc, uint32_t board, uint32_t controller);
     void setAll(uint32_t colour, bool show = true);
     void setAll(uint32_t colour, uint8_t start, uint8_t end, bool show = true);
     void setFrontLights();
     void setPixel(uint8_t pixel, uint32_t colour, bool show);
-    uint32_t getColour(uint8_t r, uint8_t g, uint8_t b, uint8_t w);
-    void showBatteryGraph(float percentage);
 
 private:
     Adafruit_NeoPixel *_strip;

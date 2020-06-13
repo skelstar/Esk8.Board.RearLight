@@ -10,12 +10,7 @@
 //------------------------------------------------------------------
 
 #define LIGHTS_PIN 27
-#ifdef REARLIGHT
-#define NUM_PIXELS 31
-#endif
-#ifdef HEADLIGHT
 #define NUM_PIXELS 8 + 8 // 8 leds each side
-#endif
 
 #include <LedLightsLib.h>
 LedLightsLib light;
@@ -27,7 +22,16 @@ LedLightsLib light;
 void setup()
 {
   Serial.begin(115200);
-  Serial.printf("\n-----------\nEsk8.Board.RearLight: Ready!\n");
+  Serial.printf("\n-----------\n");
+  Serial.printf("Esk8.Board.RearLight:\n");
+#ifdef HEADLIGHT
+  Serial.printf("- mode: HEADLIGHT\n");
+#endif
+#ifdef REARLIGHT
+  Serial.printf("- mode: REARLIGHT\n");
+#endif
+  Serial.printf("- brightness: %d\n", LIGHT_BRIGHTNESS);
+  Serial.println();
 
   addFsmTransitions();
 }
@@ -36,17 +40,9 @@ elapsedMillis since_refreshed_leds;
 
 void loop()
 {
-
   fsm.run_machine();
-  //   if (since_refreshed_leds > 5000)
-  //   {
-  //     since_refreshed_leds = 0;
-  // #ifdef HEADLIGHT
-  //     light.setFrontLights();
-  // #endif
-  // #ifdef REARLIGHT
-  //     light.setAll(light.COLOUR_RED);
-  // #endif
-  //   }
+
   vTaskDelay(10);
 }
+
+//------------------------------------------------------------------

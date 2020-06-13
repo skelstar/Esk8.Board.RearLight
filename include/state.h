@@ -8,6 +8,8 @@ enum LightEvent
   EV_WIPE_FINISHED,
 };
 
+uint32_t wipeFrom, wipeTo;
+
 void triggerFsm(LightEvent ev);
 
 //------------------------------------------------------------------
@@ -35,8 +37,8 @@ State state_wipe_up(
       if (sinceWipedUpStep > WIPED_UP_STEP_PERIOD && stillWiping)
       {
         sinceWipedUpStep = 0;
-        light.setPixel(i, light.COLOUR_HEADLIGHT_WHITE, true);
-        light.setPixel((light.numPixels() / 2) + i, light.COLOUR_HEADLIGHT_WHITE, true);
+        light.setPixel(i, wipeTo, true);
+        light.setPixel((light.numPixels() / 2) + i, wipeTo, true);
         i++;
       }
       else if (!stillWiping)
@@ -59,17 +61,28 @@ State state_all_on([] {
                    NULL, NULL);
 //------------------------------------------------------------------
 
+void setHeadlightWipe()
+{
+  wipeTo = light.COLOUR_HEADLIGHT_WHITE;
+}
+
+void setRearlightWipe()
+{
+  wipeTo = light.COLOUR_RED;
+}
+
 Fsm fsm(&state_init);
 //------------------------------------------------------------------
 
 void addFsmTransitions()
 {
 #ifdef HEADLIGHT
-  fsm.add_transition(&state_init, &state_wipe_up, EV_INIT_FINISHED, NULL);
+  fsm.add_transition(&state_init, &state_wipe_up, EV_INIT_FINISHED, setHeadlightWipe);
   fsm.add_transition(&state_wipe_up, &state_all_on, EV_WIPE_FINISHED, NULL);
 #endif
 #ifdef REARLIGHT
-  fsm.add_transition(&state_init, &state_all_on, EV_INIT_FINISHED, NULL);
+  fsm.add_transition(&state_init, &state_wipe_up, EV_INIT_FINISHED, setRearlightWipe);
+  fsm.add_transition(&state_wipe_up, &state_all_on, EV_WIPE_FINISHED, NULL);
 #endif
 }
 //------------------------------------------------------------------

@@ -73,30 +73,6 @@ int LedLightsLib::numPixels()
 }
 
 //------------------------------------------------------------------
-
-void LedLightsLib::setStatusIndicators(uint32_t vesc, uint32_t board, uint32_t controller)
-{
-  _strip->clear();
-
-  int i = 3;
-  setPixel(i++, controller, false);
-  setPixel(i++, controller, false);
-  setPixel(i++, controller, false);
-
-  i = i + 2;
-  setPixel(i++, board, false);
-  setPixel(i++, board, false);
-  setPixel(i++, board, false);
-
-  i = i + 2;
-  setPixel(i++, vesc, false);
-  setPixel(i++, vesc, false);
-  setPixel(i++, vesc, false);
-
-  _strip->show();
-}
-//------------------------------------------------------------------
-
 void LedLightsLib::setPixel(uint8_t pixel, uint32_t colour, bool show = true)
 {
   _strip->setPixelColor(pixel, colour);
@@ -105,37 +81,5 @@ void LedLightsLib::setPixel(uint8_t pixel, uint32_t colour, bool show = true)
     _strip->show();
   }
 }
-//------------------------------------------------------------------
 
-uint32_t LedLightsLib::getColour(uint8_t r, uint8_t g, uint8_t b, uint8_t w)
-{
-  return _strip->Color(r, g, b, w);
-}
-
-void LedLightsLib::showBatteryGraph(float percentage)
-{
-  if (percentage < 0 || percentage > 1.0)
-  {
-    return;
-  }
-  uint8_t oldBrightness = _strip->getBrightness();
-  _strip->setBrightness(100);
-
-  // show bargraph in one ring
-  uint8_t numRingPixels = _strip->numPixels() / 2;
-
-  uint8_t p = percentage * numRingPixels; // because two rings
-
-  for (uint8_t i = 0; i < numRingPixels; i++)
-  {
-    uint32_t c = (i <= p)
-                     ? COLOUR_GREEN
-                     : COLOUR_RED;
-    _strip->setPixelColor(i, c);
-  }
-  _strip->show();
-  // restore brightness
-  _strip->setBrightness(oldBrightness);
-  return;
-}
 //------------------------------------------------------------------
